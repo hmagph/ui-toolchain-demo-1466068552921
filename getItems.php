@@ -5,20 +5,20 @@ include 'getService.php';
 function RetrieveItems()
 {
     //echo "\r\n**************************************";
-//    $application = getenv("VCAP_APPLICATION");
-//    //echo "\r\napplication:" . $application;
-//    $application_json = json_decode($application, true);
-//    $applicationURI = $application_json["application_uris"][0];
-//    //echo "\r\napplicationURI:" . $applicationURI;
-//    if (substr( $applicationURI, 0, 3 ) === "ui-") {
-//        $catalogHost = "catalog-api-" . substr($applicationURI, 3);
-//    } else {
-//        $catalogHost = str_replace("-ui-", "-catalog-api-", $applicationURI);
-//    }
-    //echo "\r\ncatalogHost:" . $catalogHost;    
-    $catalogRoute = GetServices("catalog-api");
+    $application = getenv("VCAP_APPLICATION");
+    echo "\r\napplication:" . $application;
+    $application_json = json_decode($application, true);
+    $application_name = $application_json["application_name"];
+    //echo "\r\napplication_name:" . $application_name;
+    if (substr( $application_name, 0, 3 ) === "ui-") {
+        $catalog_name = "catalog-api-" . substr($application_name, 3);
+    } else {
+        $catalog_name = str_replace("-ui-", "-catalog-api-", $application_name);
+    }
+    //echo "\r\ncatalog_name:" . $catalog_name;    
+    $catalog_url = GetServices($catalog_name);
     //echo "\r\ncatalogRoute:" . $catalogRoute;    
-    $url = $catalogRoute . "/items";
+    $url = $catalog_url . "/items";
 
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $url);
